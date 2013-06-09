@@ -194,7 +194,7 @@ function showMainContainer(containerDivName, username) {
 	htmlVar += '	</span>';
 	htmlVar += '</div>';
 	htmlVar += '<div id="navwrapper">';
-	htmlVar += '<ul id="nav" class="floatleft">';
+	htmlVar += '<ul id="nav" class="floatleft"><li> <a href="/submissions/">Submissions</a></li>';
 
 	if (jQuery.MifosXUI.showMenu("ClientsMenu"))
 		htmlVar += '	<li><a href="unknown.html" onclick="showILClientListing(' + "'content'" + ');return false;">' + doI18N("link.topnav.clients") + '</a></li>';
