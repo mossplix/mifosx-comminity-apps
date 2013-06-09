@@ -6867,12 +6867,12 @@ function getBaseApiURL(docURL)
 	
 	var baseApiUrl = "";
 	if (l.hostname == "localhost" || l.hostname == "" || l.hostname == null) {
-		baseApiUrl = "https://151.236.219.158:8443/mifosng-provider/api/v1/?tenantIdentifier=default";
+		baseApiUrl = "https://151.236.219.158:8443/mifosng-provider/api/v1/";
 	}
 	else if (l.hostname == "demo.openmf.org") {
 		baseApiUrl = "/mifosng-provider/api/v1/";
 	} else {
-		baseApiUrl = "https://" + l.hostname + ":8443/mifosng-provider/api/v1/?tenantIdentifier=default";
+		baseApiUrl = "https://" + l.hostname + ":8443/mifosng-provider/api/v1/";
 	}
 	
 	if (QueryParameters["baseApiUrl"]) {
