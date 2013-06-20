@@ -3,13 +3,14 @@
 //It won't be shown unless you pass the query parameter 'mode=dev'
 //You can then use showMenu or showTask as normal to check if it should be displayed
 //Once you are finished development, you can remove from this array and put in taskPermissionsMatrix or menuTasksMatrix 
-inDevelopmentTasks = ["GROUPSMENU", "COLLECTIONSHEETMENU", "CHECKERMENU",
-                      "VIEWSAVINGPRODUCTS", "ADDSAVINGPRODUCT", 
+inDevelopmentTasks = ["CENTERSMENU", "COLLECTIONSHEETMENU", "CHECKERMENU", "SAVINGSMENU",
+                      "VIEWSAVINGPRODUCTS", "ADDSAVINGPRODUCT", "ADDHOLIDAY", 
                       "VIEWCONFIGURATION", "MANAGEPERMISSIONS", "CLOSEASRESCHEDULEDLOAN",
                       "ADDSAVINGACCOUNT"];
 
 //This does know about Mifos X Permission checking - each piece of functionality needs to be linked to a Mifos X permission
 taskPermissionsMatrix = {
+		DASHBOARDSEARCH: ["DASHBOARDSEARCH"],
 		CLIENTSEARCH: ["READ_CLIENT"],
 
 		GROUPSEARCH: ["READ_GROUP"],
@@ -23,6 +24,8 @@ taskPermissionsMatrix = {
 		ADDLOANPRODUCT: ["CREATE_LOANPRODUCT"],
 		VIEWSAVINGPRODUCTS: ["READ_SAVINGPRODUCT"],
 		ADDSAVINGPRODUCT: ["CREATE_SAVINGPRODUCT"],
+		VIEWSAVINGACCOUNTS: ["READ_SAVINGSACCOUNT"],
+		
 		VIEWFUNDS: ["READ_FUND"],
 		ADDFUND: ["CREATE_FUND"],
 		VIEWEMPLOYEES: ["READ_STAFF"],
@@ -36,7 +39,12 @@ taskPermissionsMatrix = {
 		ADDOFFICEMONEYTXN: ["CREATE_OFFICETRANSACTION"],
 		DELETEOFFICEMONEYTXN: ["DELETE_OFFICETRANSACTION"],
 		
+		ADDHOLIDAY: ["CREATE_HOLIDAY"],
+		
 		VIEWDATATABLES: ["READ_DATATABLE"],
+		CREATEDATATABLE: ["CREATE_DATATABLE"],
+		UPDATEDATATABLE: ["UPDATE_DATATABLE"],
+		DELETEDATATABLE: ["DELETE_DATATABLE"],
 		REGISTERDATATABLE: ["REGISTER_DATATABLE"],
 		DEREGISTERDATATABLE: ["DEREGISTER_DATATABLE"],
 		VIEWCODES: ["READ_CODE"],
@@ -90,21 +98,41 @@ taskPermissionsMatrix = {
 		
 		ADDSAVINGACCOUNT: ["CREATE_SAVINGACCOUNT"],
 		
-		VIEWJOURNALENTRIES: ["READ_JOURNALENTRIES"]
+		VIEWJOURNALENTRIES: ["READ_JOURNALENTRIES"],
+
+		ADDGROUP: ["CREATE_GROUP"],
+		VIEWGROUP: ["READ_GROUP"],
+		ADDJLGLOAN: ["CREATE_JLG_LOAN"],//not mapped to platform permission
+		ADDJLGBULKLOAN: ["CREATE_JLGBULK_LOAN"],//not mapped to platform permission
+		VIEWACCOUNTSDETAILS: ["READ_LOANDETAILS"],//not mapped to platform permission
+		VIEWMEETING: ["READ_MEETING"],//not mapped to platform permission
+		ATTACHMEETING: ["ATTACH_MEETING"],//not mapped to platform permission
+		ADDGROUPLOAN: ["CREATE_GROUPLOAN"],//not mapped to platform permission
+		ACTIVATEGROUP: ["ACTIVATE_GROUP"],
+
+		VIEWCENTER: ["READ_CENTER"],
+		ADDCENTER: ["CREATE_CENTER"],
+		EDITCENTER: ["UPDATE_CENTER"],
+		DELETECENTER: ["DELETE_CENTER"],
+		ACTIVATECENTER: ["ACTIVATE_CENTER"],
+		CENTERSEARCH: ["READ_CENTER"]
 	};
 
 
 menuTasksMatrix = {
+		DASHBOARDMENU: ["DASHBOARDSEARCH"],
 		CLIENTSMENU: ["CLIENTSEARCH"],
 		CHECKERMENU: ["CHECKERINBOX"],
 		COLLECTIONSHEETMENU: ["GROUPSEARCH"],
 		GROUPSMENU: ["GROUPSEARCH"],
+		SAVINGSMENU: ["VIEWSAVINGACCOUNTS"],
 		USERADMINMENU: ["VIEWUSERS", "ADDUSER", "VIEWROLES", "ADDROLE"],
 		ORGADMINMENU: ["VIEWLOANPRODUCTS", "ADDLOANPRODUCT",  "VIEWFUNDS", "ADDFUND",
 				"VIEWEMPLOYEES", "ADDEMPLOYEE", "VIEWCHARGES", "ADDCHARGE", "CURRENCYCONFIGURATION",
 				"VIEWOFFICES", "ADDOFFICE", "VIEWOFFICEMONEYTXNS", "ADDOFFICEMONEYTXN", "BULKLOANREASSIGNMENT"],
-		SYSADMINMENU: ["VIEWDATATABLES", "REGISTERDATATABLE", "VIEWCODES", "ADDCODE", "VIEWPERMISSIONS", "MANAGEPERMISSIONS", "VIEWCONFIGURATION", "VIEWAUDITS", "VIEWREPORTS"],
-		ACCOUNTINGMENU: ["VIEWJOURNALENTRIES"]
+		SYSADMINMENU: ["VIEWDATATABLES", "CREATEDATATABLE", "REGISTERDATATABLE", "VIEWCODES", "ADDCODE", "VIEWPERMISSIONS", "MANAGEPERMISSIONS", "VIEWCONFIGURATION", "VIEWAUDITS", "VIEWREPORTS"],
+		ACCOUNTINGMENU: ["VIEWJOURNALENTRIES"],
+		CENTERSMENU: ["VIEWCENTER"]
 		// api only brings back reports that are permitted so this is not needed REPORTSMENU: ["TBD"]
 	};
 
@@ -115,7 +143,7 @@ tenantNameInclusions = {
 tenantNameExclusions = {
 		"DEFAULT": ["VIEWOFFICEMONEYTXNS", "ADDOFFICEMONEYTXN"],
 		
-		"CEDA-MICROFINANCE": ["CHECKERMENU", "GROUPSMENU", "VIEWFUNDS", "ADDFUND", 
+		"CEDA-MICROFINANCE": ["CHECKERMENU", "VIEWFUNDS", "ADDFUND", 
 		                      "VIEWSAVINGPRODUCTS", "ADDSAVINGPRODUCT", "VIEWOFFICEMONEYTXNS", 
 		                      "ADDOFFICEMONEYTXN", "ADDSAVINGACCOUNT", "VIEWCONFIGURATION"],
 		                      
@@ -135,24 +163,23 @@ tenantNameExclusions = {
 applicationProfiles = ["ALL", "IL", "TEVI"];
 
 applicationProfileExclusions = {
-		IL: ["GROUPSMENU", "VIEWOFFICEMONEYTXNS", "ADDOFFICEMONEYTXN"],
-		TEVI: ["GROUPSMENU", "VIEWOFFICEMONEYTXNS", "ADDOFFICEMONEYTXN"]
-
-	};
+		ALL: ["DASHBOARDMENU"],
+		IL: ["DASHBOARDMENU", "GROUPSMENU", "VIEWOFFICEMONEYTXNS", "ADDOFFICEMONEYTXN"],
+		TEVI: ["GROUPSMENUxx", "VIEWOFFICEMONEYTXNS", "ADDOFFICEMONEYTXN", "ADDJLGBULKLOAN", "ADDGROUPLOAN", "ATTACHMEETING", 
+				"VIEWMEETING", "VIEWACCOUNTSDETAILS"]
+};
 
 applicationProfileInclusions = {
-	};//probably not needed as only useful to exclude at this point (tenantName inclusions/exclusions processed first)
-
-
+		TEVI: ["DASHBOARDMENU"]
+};//probably not needed as only useful to exclude at this point (tenantName inclusions/exclusions processed first)
 
 isInitialised = false;
 
-
 	$.MifosXUI = {};
 
-	$.MifosXUI.initialise = function(pUserRoles, pUserPermissions, pApplicationProfile, pTenantName, pApplicationMode) {
+	$.MifosXUI.initialise = function(pStaffUser, pUserPermissions, pApplicationProfile, pTenantName, pApplicationMode) {
 
-		mUserRoles = pUserRoles;
+		mStaffUser = pStaffUser;
 		mUserPermissions = pUserPermissions;
 		mApplicationProfile = pApplicationProfile.toUpperCase();
 		mApplicationMode = pApplicationMode.toUpperCase();
@@ -197,7 +224,8 @@ isInitialised = false;
 
 
 	function showMenu(menuName) {
-
+//		console.log("showMenu: " + menuName);
+		
 		if (excludeBasedOnQueryParams(menuName) == true) return false;
 
 		if (menuName == "CHECKERMENU") return hasCheckerPermissions();
@@ -302,7 +330,8 @@ isInitialised = false;
 	}
 
 	function excludeBasedOnQueryParams(itemName) {
-
+//		console.log("excludeBasedOnQueryParams: " + itemName);
+		
 		if (isDevTask(itemName) == true)
 		{
 			if (mApplicationMode == "DEV") return false;
@@ -310,6 +339,9 @@ isInitialised = false;
 		}
 
 		var tenantNameCheckResult = tenantNameCheck(itemName);
+		
+//		console.log("tenantNameCheckResult: " + tenantNameCheckResult);
+		
 		switch (tenantNameCheckResult) {
 		case "EXCLUDE":
 //			alert(itemName + ": " + tenantNameCheckResult);
@@ -318,6 +350,8 @@ isInitialised = false;
 			return false;
 		case "CONTINUE":
 			var applicationProfileCheckResult = applicationProfileCheck(itemName);
+//			console.log("applicationProfileCheckResult: " + applicationProfileCheckResult);
+			
 			switch (applicationProfileCheckResult) {
 			case "EXCLUDE":
 				return true;
@@ -347,12 +381,14 @@ isInitialised = false;
 	}
 
 	function includeExcludeCONTINUE(taskName, name, inclusions, exclusions) {
+//		console.log("taskName: " + taskName + " <<>> name: " + name);
 //If name found and the taskName is included - INCLUDE
 //If name found and the taskName is excluded - EXCLUDE
 //Otherwise (CONTINUE)
 
 		for (var i in inclusions) 
 		{
+//			console.log("inclusions: " + i);
 			if (i == name)
 			{
 				for (var j in inclusions[i])
@@ -364,6 +400,7 @@ isInitialised = false;
 
 		for (var i in exclusions) 
 		{
+//			console.log("exclusions: " + i);
 			if (i == name)
 			{
 				for (var j in exclusions[i])
@@ -395,6 +432,4 @@ isInitialised = false;
 		alert("Invalid Application Profile: " + mApplicationProfile);
 		return false;
 	}
-
-
 })(jQuery);

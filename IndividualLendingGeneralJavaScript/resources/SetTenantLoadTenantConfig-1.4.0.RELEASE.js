@@ -30,10 +30,8 @@ custom = {
 	jqueryDataTableLayout : ""
 };
 
-custom.showFirstPage = function() {
-
-	showILClientListing('content');
-
+custom.showFirstPage = function(userId) {
+	showILClientListing("content");
 }
 
 Date.daysBetween = function(date1, date2) {
@@ -313,8 +311,10 @@ custom.sDom = {
 	"clientstable" : '<"H"lfr<"#clientstablecustom">>t<"F"ip>',					
 	"centerstable" : '<"H"lfr<"#centerstablecustom">>t<"F"ip>',
 	"groupstable" : '<"H"lfr<"#groupstablecustom">>t<"F"ip>',
-	"loanstable" : '<"H"lfr<"#clientstablecustom">>t<"F"ip>',	
-	"journalentriestable": '<"H"lr>t<"F"ip>',		
+	"loanstable" : '<"H"lfr<"#clientstablecustom">>t<"F"ip>',
+	"savingsaccountstable" : '<"H"lfr<"#loanstablecustom">>t<"F"ip>',	
+	"journalentriestable": '<"H"lr>t<"F"ip>',
+	"groupsstatstable" : '<"H"lfr<"#groupsstatstablecustom">>t<"F"ip>'
 }
 
 custom.searchQuery = {
@@ -329,7 +329,14 @@ custom.searchQuery = {
 					},
 	"loanstable" :  function(searchValue){
 						return "accountNo like'%"+searchValue+"%'";
-					}	
+					},
+   "savingsaccountstable" :  function(searchValue){
+ 			             return "accountNo like '%"+searchValue+"%'";	
+ 			         },
+	"groupsstatstable" : function(searchValue){
+						 return "display_name like '%"+searchValue+"%'";
+ 			         }
+
 }
 
 //table properties
@@ -540,8 +547,65 @@ custom.datatablePresentation2 = {
 										if(data>=300)
 											return full.summary.totalOutstanding;
 										else return "";
-								   }	
-				    }]
+								   }
+				    }],
+	"savingsaccountstable" : [{
+				            "mDataProp": "accountNo",
+				            "aTargets":  [0]
+				          },
+				          {
+				            "mDataProp": "status.value",
+				            "aTargets": [1],
+				            "bSortable": false
+				          },
+				          {
+				            "mDataProp": "savingsProductName",
+				            "aTargets":  [2]
+				          }],
+    "groupsstatstable" : [{
+    					"mDataProp": "loanId",
+    					"aTargets": [0]
+					    },
+					    {
+    					"mDataProp": "programName",
+    					"aTargets": [1]
+					    },
+					    {
+    					"mDataProp": "loanCycleNo",
+    					"aTargets": [2]
+					    },
+					    {
+    					"mDataProp": "clientDisplayName",
+    					"aTargets": [3]
+					    },
+					    {
+    					"mDataProp": "currency",
+    					"aTargets": [4]
+					    },
+					    {
+    					"mDataProp": "loanRepaidAmount",
+    					"aTargets": [5]
+					    },
+					    {
+    					"mDataProp": "loanOutstandingAmount",
+    					"aTargets": [6]
+					    },
+					    {
+    					"mDataProp": "loanInAdvanceAmount",
+    					"aTargets": [7]
+					    },
+					    {
+    					"mDataProp": "loanInArrearsAmount",
+    					"aTargets": [8]
+					    },
+					    {
+    					"mDataProp": "inDefault",
+    					"aTargets": [9]
+					    },
+					    {
+    					"mDataProp": "portfolioAtRisk",
+    					"aTargets": [10]
+					    }]
 }
 
 custom.showRelatedDataTableInfo = function(tabVar, appTableName,
@@ -902,6 +966,26 @@ if (QueryParameters["mode"]) applicationMode = QueryParameters["mode"];
 tenantIdentifier = "default";
 if (QueryParameters["tenantIdentifier"])
 	tenantIdentifier = QueryParameters["tenantIdentifier"];
+
+function setTenantIdentifierForProductionServer()
+{
+	var l = document.createElement("a");
+    l.href = window.location.href;
+	if (l.hostname == "demo.openmf.org") {
+		tenantIdentifier = "default";
+	} else if (l.hostname.toLowerCase().indexOf("openmf.org") >= 0) {
+		var input = l.hostname;
+		var lines = input.split('.');
+		var output = '';
+		$.each(lines, function(key, line) {
+		   output=line;
+		   return false;
+		});
+		tenantIdentifier = output.replace('https://',"");
+	}
+}
+
+setTenantIdentifierForProductionServer();
 
 var configScript = '<script type="text/javascript" src="resources/configs/tenant/'
 		+ tenantIdentifier + '.js"></script>';
